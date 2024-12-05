@@ -5,7 +5,7 @@ from src.hp import Hp
    
 
 class Enemy(pygame.sprite.Sprite):
-   def __init__(self, x, y, sprite_sheet_idle, sprite_sheet_upper, sprite_sheet_slash, sprite_sheet_overhead, frame_width, frame_height, num_frames, font, success_sound, sword_sound, hit_sound):
+   def __init__(self, x, y):
       """
       Initialize the player with a sprite sheet.
       x: int - Starting x coordinate
@@ -17,10 +17,18 @@ class Enemy(pygame.sprite.Sprite):
       """
       super().__init__()
       self.sprite_sheets = {
-         "idle" : pygame.image.load(sprite_sheet_idle).convert_alpha(),
-         "upper" : pygame.image.load(sprite_sheet_upper).convert_alpha(),
-         "slash" :pygame.image.load(sprite_sheet_slash).convert_alpha(),
-         "overhead" : pygame.image.load(sprite_sheet_overhead).convert_alpha()
+         "idle" : pygame.image.load("assets/animations/Fantasy_Warrior/Sprites/IdleRed.png").convert_alpha(),
+         "upper" : pygame.image.load("assets/animations/Fantasy_Warrior/Sprites/UpperRed.png").convert_alpha(),
+         "slash" :pygame.image.load("assets/animations/Fantasy_Warrior/Sprites/SlashRed.png").convert_alpha(),
+         "overhead" : pygame.image.load("assets/animations/Fantasy_Warrior/Sprites/OverheadRed.png").convert_alpha()
+      }
+      
+      frame_width = 162   
+      frame_height = 162  
+      
+      num_frames = {
+         "idle" : 10,
+         "attack" : 7
       }
       
       self.animations = {
@@ -30,9 +38,9 @@ class Enemy(pygame.sprite.Sprite):
          "overhead": self.load_frames(self.sprite_sheets["overhead"], frame_width, frame_height, num_frames["attack"]),
       }
       self.enemy_sounds = {
-         "success": pygame.mixer.Sound(success_sound),
-         "sword" : pygame.mixer.Sound(sword_sound),
-         "hit" : pygame.mixer.Sound(hit_sound)
+         "success": pygame.mixer.Sound("assets/sounds/242501__gabrielaraujo__powerupsuccess.wav"),
+         "sword" : pygame.mixer.Sound("assets/sounds/sword_thunder_sound.wav"),
+         "hit" : pygame.mixer.Sound("assets/sounds/Hitmarker_sound.wav")
       }
 
       self.current_animation = "idle"
@@ -56,7 +64,8 @@ class Enemy(pygame.sprite.Sprite):
       self.attack_duration = self.animation_speed * num_frames["attack"]
       self.dealt_damage = False
       
-      self.hp = Hp(100,800,20,font)
+      hp_font = pygame.font.Font(None, 36)
+      self.hp = Hp(100,800,20,hp_font)
       self.current_attack = None
       self.is_enemy_dead = False
       

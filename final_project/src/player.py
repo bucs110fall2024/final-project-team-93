@@ -3,7 +3,7 @@ import random
 from src.hp import Hp
 
 class Player(pygame.sprite.Sprite):
-   def __init__(self, x, y, sprite_sheet_idle, sprite_sheet_upper, sprite_sheet_slash, sprite_sheet_overhead, frame_width, frame_height, num_frames, font, grunt_1, grunt_2, grunt_3):
+   def __init__(self, x, y):
       """
       Initialize the player with a sprite sheet.
       x: int - Starting x coordinate
@@ -16,11 +16,19 @@ class Player(pygame.sprite.Sprite):
       super().__init__()
       
       self.sprite_sheets = {
-         "idle": pygame.image.load(sprite_sheet_idle).convert_alpha(),
-         "upper": pygame.image.load(sprite_sheet_upper).convert_alpha(),
-         "slash": pygame.image.load(sprite_sheet_slash).convert_alpha(),
-         "overhead": pygame.image.load(sprite_sheet_overhead).convert_alpha()
+         "idle": pygame.image.load("assets/animations/Fantasy_Warrior/Sprites/IdleBlue.png").convert_alpha(),
+         "upper": pygame.image.load("assets/animations/Fantasy_Warrior/Sprites/UpperBlue.png").convert_alpha(),
+         "slash": pygame.image.load("assets/animations/Fantasy_Warrior/Sprites/SlashBlue.png").convert_alpha(),
+         "overhead": pygame.image.load("assets/animations/Fantasy_Warrior/Sprites/OverheadBlue.png").convert_alpha()
       }
+      
+      frame_width = 162   
+      frame_height = 162
+      
+      num_frames = {
+         "idle" : 10,
+         "attack" : 7
+      } 
       
       self.animations = {
          "idle": self.load_frames(self.sprite_sheets["idle"], frame_width, frame_height, num_frames["idle"]),
@@ -30,11 +38,11 @@ class Player(pygame.sprite.Sprite):
       }
       
       self.player_sounds = {
-         "grunt_1": pygame.mixer.Sound(grunt_1),
-         "grunt_2" : pygame.mixer.Sound(grunt_2),
-         "grunt_3" : pygame.mixer.Sound(grunt_3),
+         "grunt_1": pygame.mixer.Sound("assets/sounds/01._damage_grunt_male.wav"),
+         "grunt_2" : pygame.mixer.Sound("assets/sounds/03._damage_grunt_male.wav"),
+         "grunt_3" : pygame.mixer.Sound("assets/sounds/05._damage_grunt_male.wav"),
       }
-
+       
 
       self.current_animation = "idle"
       self.frames = self.animations[self.current_animation]
@@ -51,7 +59,9 @@ class Player(pygame.sprite.Sprite):
       self.can_attack = False
       self.attack_window_end = 0
       self.attacked_this_phase = False
-      self.hp = Hp(100,20,20,font)
+      
+      hp_font = pygame.font.Font(None, 36)
+      self.hp = Hp(100,20,20,hp_font)
       self.current_attack = None
 
    def load_frames(self, sprite_sheet, frame_width, frame_height, num_frames):

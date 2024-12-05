@@ -20,7 +20,6 @@ class Controller:
             "attack" : 7
         }
 
-        
 
         self.player = Player(100, 0)
         self.enemy = Enemy(425,0)
