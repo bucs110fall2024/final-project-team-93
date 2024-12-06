@@ -82,6 +82,8 @@ class Controller:
         Respawns the enemy four seconds after their death and lowers their animation speed and attack timer to make them more difficult
         '''
         now = pygame.time.get_ticks()
+        if self.player.hp.current_hp == 0:
+            self.is_player_dead = True
         if self.enemy.is_enemy_dead and self.respawn_time is None:
             self.respawn_time = now + 4000
         if self.respawn_time and now >= self.respawn_time:
