@@ -16,8 +16,8 @@ The game will have two swordsman standing on a platform facing each other. One w
 
 ### Final Design
 
-![final gui](assets/finalgui.jpg)(assets.finalgui2.jpg)
-
+![final gui](assets/finalgui.jpg)
+![final gui](assets/finalgui2.jpg)
 ## Program Design
 
 controller
