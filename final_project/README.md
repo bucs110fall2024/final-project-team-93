@@ -6,42 +6,53 @@
 
 
 ## Project Description
-    The player will control a swordsman who is capable of performing 3 different attack (overhead, slash, uppercut). The player however can only input these attacks after the enemy swordsman randomly performs one. The player is to input whatever attack the enemy performs in order to "counter" the attack and avoid damage. If they counter successfully the enemy will recieve damage, and if they fail the player will take damage. The enemy will survive 10 hits and then the player will move on to the next level where the enemy gets faster. There are an infinite amount of levels, and the player is to survive as many levels as possible. Inputting J will let the player "slash". Inputting "K" will let the player "overhead". Inputting "L" will let the player "uppercut".
+    The player will control a swordsman who is capable of performing 3 different attack (overhead, slash, uppercut). The player however can only input these attacks after the enemy swordsman randomly performs one. The player is to input whatever attack the enemy performs in order to "counter" the attack and avoid damage. If they counter successfully the enemy will recieve damage, and if they fail the player will take damage. The enemy will survive 10 hits and then the player will move on to the next level where the enemy gets faster. There are an infinite amount of levels, and the player is to survive as many levels as possible. Inputting J will let the player "slash". Inputting "K" will let the player "overhead". Inputting "L" will let the player "uppercut". The players highscore will be saved to a file and update after each game. 
 
 ## GUI Design
-
+The game will have two swordsman standing on a platform facing each other. One will be highlighted in blue to inidicate the player and the other will be red to indicate the enemy. The player's HP will be displayed in the top left and the enemy's HP will be displayed in the top right. The current level will be shown in the top of the middle of the screen. 
 ### Initial Design
 
 ![initial gui](assets/gui.jpg)
 
 ### Final Design
 
-![final gui](assets/finalgui.jpg)
+![final gui](assets/finalgui.jpg)(assets.finalgui2.jpg)
 
 ## Program Design
 
-    list classes move these to features
-playable character
-game over screen
-NPCs
-Progressive increase in difficulty
-Health Points
-Respawning NPCs
-Auido indicators
-Levels
+controller
+enemy
+gameover
+highscore
+hp
+level
+player
+view
+
 
 ### Features
 
-1. << Feature 1 >>
-2. << Feature 2 >>
-3. << Feature 3 >>
-4. << Feature 4 >>
-5. << Feature 5 >>
+1. playable character
+2. game over screen
+3. NPCs
+4. Progressive increase in difficulty
+5. Health Points
+6. Respawning NPCs
+7. Audio indicators
+8. Levels
+9. Saved Highscore 
 
 ### Classes
 
-- Player: The class that creates the character the person playing the game will control. Has 3 attacks (slash, overhead, stab) to use to counter an enemy attack. It controls sound effects the player creates and the players animations.  
-- Enemy: The class that creates the enemy chaarcter. This class randomly selects one of the 3 attacks and animates the enemy to perform the attack. It controls sound effects created by the character
+controller: maintains game flow
+enemy: controls the enemy class 
+gameover: manages the game over message to be displayed
+highscore: writes out the highscore to a file
+hp: manages the characters health
+level: manages the level
+player: controls the player class
+view: manages what displays
+
 
 ## ATP
 

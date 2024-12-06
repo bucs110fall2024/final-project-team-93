@@ -6,12 +6,13 @@ class Player(pygame.sprite.Sprite):
    def __init__(self, x, y):
       """
       Initialize the player with a sprite sheet.
-      x: int - Starting x coordinate
-      y: int - Starting y coordinate
-      sprite_sheet_file: str - Path to the sprite sheet file
-      frame_width: int - Width of a single frame
-      frame_height: int - Height of a single frame
-      num_frames: int - Total number of frames in the sprite sheet
+      args:
+        x: int - Starting x coordinate
+        y: int - Starting y coordinate
+        sprite_sheet_file: str - Path to the sprite sheet file
+        frame_width: int - Width of a single frame
+        frame_height: int - Height of a single frame
+        num_frames: int - Total number of frames in the sprite sheet
       """
       super().__init__()
       
@@ -42,7 +43,7 @@ class Player(pygame.sprite.Sprite):
          "grunt_2" : pygame.mixer.Sound("assets/sounds/03._damage_grunt_male.wav"),
          "grunt_3" : pygame.mixer.Sound("assets/sounds/05._damage_grunt_male.wav"),
       }
-       
+
 
       self.current_animation = "idle"
       self.frames = self.animations[self.current_animation]
@@ -67,10 +68,13 @@ class Player(pygame.sprite.Sprite):
    def load_frames(self, sprite_sheet, frame_width, frame_height, num_frames):
       """
       Extract frames from the sprite sheet.
-      frame_width: int - Width of each frame
-      frame_height: int - Height of each frame
-      num_frames: int - Number of frames to extract
-      :return: List of frames (pygame.Surface objects)
+      args:
+        sprite_sheet: str - The sprite sheet for the animation
+        frame_width: int - Width of each frame
+        frame_height: int - Height of each frame
+        num_frames: int - Number of frames to extract
+      return: 
+        str: List of frames 
       """
       frames = []
       sheet_width, sheet_height = sprite_sheet.get_size()
@@ -84,7 +88,7 @@ class Player(pygame.sprite.Sprite):
 
    def update(self):
       """
-      Handle sprite updates (like animations).
+      Handle sprite updates
       """
       if self.is_animating:
          now = pygame.time.get_ticks()
@@ -116,71 +120,42 @@ class Player(pygame.sprite.Sprite):
       self.is_animating = False
       self.current_frame = 0
       self.image = self.frames[self.current_frame]
-      
-   def counter(self, enemy):
-      now = pygame.time.get_ticks()
-      if self.can_attack and now <= self.attack_window_end:
-         enemy.take_damage(10)
-         self.can_attack = False
-      else: 
-         self.take_damage(10)
          
          
    
    def take_damage(self, damage):
+      '''
+      The player takes damage
+      args: 
+        damage: int - how much damage the player takes
+      '''
       self.hp.take_damage(damage)
       self.player_sounds[random.choice(["grunt_1","grunt_2","grunt_3"])].play()
       
       
    
    def draw_health(self, screen):
-      self.hp.draw(screen)
-   
-
-   def overhead(self):
-      """
-      Perform an overhead attack animation.
-      """
-      if (self.can_attack == False) or (self.attacked_this_phase == True):
-         return
-      self.current_attack = "overhead"
-      self.current_animation = "overhead"
-      self.frames = self.animations[self.current_animation]
-      self.current_frame = 0
-      self.start_animation()    
-      self.attacked_this_phase = True  
-
-   def slash(self):
-      """
-      Perform a slash attack animation.
-      """
-      if (self.can_attack == False) or (self.attacked_this_phase == True):
-         return
-      self.current_attack = "slash"
-      self.current_animation = "slash"
-      self.frames = self.animations[self.current_animation]
-      self.current_frame = 0
-      self.start_animation()     
-      self.attacked_this_phase = True  
-      
-   def upper(self):
-      """
-      Perform a uppercut attack animation.
-      """
-      if (self.can_attack == False) or (self.attacked_this_phase == True):
-         return
-      self.current_attack = "upper"
-      self.current_animation = "upper"
-      self.frames = self.animations[self.current_animation]
-      self.current_frame = 0
-      self.start_animation()
-      self.attacked_this_phase = True  
+       '''
+       Allows the players health to be drawn on the screen
+       args:
+        screen: str - the screen the health is to be displayed on
+       '''
+       self.hp.draw(screen)
+     
    
    def reset_attack(self):
+      '''
+      Resets the attack back to no attack and gets the player ready to attack next window
+      '''
       self.current_attack = None
       self.attacked_this_phase = False
       
    def counter(self, enemy):
+      '''
+      Determines if the player will take damage or deal damage against the enemy
+      args:
+        enemy: str - the enemy class the player interacts with
+      ''' 
       if self.current_attack == enemy.current_attack:
          enemy.take_damage(10)
          self.can_attack = False
@@ -188,3 +163,17 @@ class Player(pygame.sprite.Sprite):
          self.take_damage(10)
       self.reset_attack()
       
+   def set_attack(self, attack_type):
+      '''
+      Determines what attack the player performs based on user input
+      args:
+        attack_type: str - the attack the player performs
+      ''' 
+      if not self.can_attack or self.attacked_this_phase:
+        return
+      self.current_attack = attack_type
+      self.current_animation = attack_type
+      self.frames = self.animations[self.current_animation]
+      self.current_frame = 0
+      self.start_animation()
+      self.attacked_this_phase = True

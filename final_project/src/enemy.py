@@ -8,12 +8,13 @@ class Enemy(pygame.sprite.Sprite):
    def __init__(self, x, y):
       """
       Initialize the player with a sprite sheet.
-      x: int - Starting x coordinate
-      y: int - Starting y coordinate
-      sprite_sheet_file: str - Path to the sprite sheet file
-      frame_width: int - Width of a single frame
-      frame_height: int - Height of a single frame
-      num_frames: int - Total number of frames in the sprite sheet
+      args:
+        x: int - Starting x coordinate
+        y: int - Starting y coordinate
+        sprite_sheet_file: str - Path to the sprite sheet file
+        frame_width: int - Width of a single frame
+        frame_height: int - Height of a single frame
+        num_frames: int - Total number of frames in the sprite sheet
       """
       super().__init__()
       self.sprite_sheets = {
@@ -26,17 +27,18 @@ class Enemy(pygame.sprite.Sprite):
       frame_width = 162   
       frame_height = 162  
       
-      num_frames = {
+      self.num_frames = {
          "idle" : 10,
          "attack" : 7
       }
       
       self.animations = {
-         "idle": self.load_frames(self.sprite_sheets["idle"], frame_width, frame_height, num_frames["idle"]),
-         "upper": self.load_frames(self.sprite_sheets["upper"], frame_width, frame_height, num_frames["attack"]),
-         "slash": self.load_frames(self.sprite_sheets["slash"], frame_width, frame_height, num_frames["attack"]),
-         "overhead": self.load_frames(self.sprite_sheets["overhead"], frame_width, frame_height, num_frames["attack"]),
+         "idle": self.load_frames(self.sprite_sheets["idle"], frame_width, frame_height, self.num_frames["idle"]),
+         "upper": self.load_frames(self.sprite_sheets["upper"], frame_width, frame_height, self.num_frames["attack"]),
+         "slash": self.load_frames(self.sprite_sheets["slash"], frame_width, frame_height, self.num_frames["attack"]),
+         "overhead": self.load_frames(self.sprite_sheets["overhead"], frame_width, frame_height, self.num_frames["attack"]),
       }
+      
       self.enemy_sounds = {
          "success": pygame.mixer.Sound("assets/sounds/242501__gabrielaraujo__powerupsuccess.wav"),
          "sword" : pygame.mixer.Sound("assets/sounds/sword_thunder_sound.wav"),
@@ -61,7 +63,7 @@ class Enemy(pygame.sprite.Sprite):
       
       self.is_attacking = False
       self.attack_start_time = 0
-      self.attack_duration = self.animation_speed * num_frames["attack"]
+      self.attack_duration = self.animation_speed * self.num_frames["attack"]
       self.dealt_damage = False
       
       hp_font = pygame.font.Font(None, 36)
@@ -73,10 +75,13 @@ class Enemy(pygame.sprite.Sprite):
    def load_frames(self, sprite_sheet, frame_width, frame_height, num_frames):
       """
       Extract frames from the sprite sheet.
-      frame_width: int - Width of each frame
-      frame_height: int - Height of each frame
-      num_frames: int - Number of frames to extract
-      return: List of frames (pygame.Surface objects)
+      args:
+        sprite_sheet: str - The sprite sheet for the animation
+        frame_width: int - Width of each frame
+        frame_height: int - Height of each frame
+        num_frames: int - Number of frames to extract
+      return: 
+        str: List of frames 
       """
       frames = []
       sheet_width, sheet_height = sprite_sheet.get_size()
@@ -91,7 +96,9 @@ class Enemy(pygame.sprite.Sprite):
 
    def set_animation(self, animation_name):
     """
-    Switch to the specified animation.
+    Switch to the specified animation
+    args:
+        animation_names: str -The name of the animation to be set
     """
     if animation_name in self.animations:
         self.current_animation = animation_name
@@ -141,11 +148,16 @@ class Enemy(pygame.sprite.Sprite):
 
     if now - self.last_attack_time > self.attack_timer:
         self.last_attack_time = now
-        self.attack_timer = random.randint(1000, 3000)
+        self.attack_timer = random.randint(1000, self.attack_timer_max)
         attack = random.choice(["overhead", "slash", "upper"])
         self.set_animation(attack)
    
-   def take_damage(self, damage): 
+   def take_damage(self, damage):
+      '''
+      Allows the enemy to take damage
+      args:
+        damage: int - the amount of damage the enemy takes
+      '''
       self.hp.take_damage(damage)
       self.enemy_sounds["hit"].play()
       if self.hp.current_hp == 0:
@@ -153,7 +165,41 @@ class Enemy(pygame.sprite.Sprite):
          self.set_animation(None)
    
    def draw_health(self,screen):
-      self.hp.draw(screen)   
-
-
-
+      '''
+      Allows the HP to display on screen
+      args:
+        screen: str - the screen to be displayed on'''
+      self.hp.draw(screen)
+      
+   def respawn(self, animation_speed, attack_timer_max):
+     '''
+     Decreases the values of the enemy's durations to make the attack harders
+     args: 
+        animation_speed: int - the new animation speed for after the respawn
+        attack_timer_max: int the new max time between attacks for after the respawn
+     '''
+     self.animation_speed = animation_speed
+     self.attack_timer_max = attack_timer_max
+     self.attack_duration = self.animation_speed * self.num_frames["attack"]
+       
+   def handle_attack(self, player, now):
+    '''
+    Determines if the enemy will recieve damage during the attack window
+    args:
+        player: str - brings the player class from controller to interact with
+        now: - the time the attack started
+    '''
+    attack_window_start = self.attack_start_time
+    attack_window_end = self.attack_start_time + self.attack_duration
+    if attack_window_start <= now <= attack_window_end:
+        player.can_attack = True
+    elif now > attack_window_end and not self.dealt_damage:
+        if player.attacked_this_phase:
+            player.counter(self)
+        else:
+            player.take_damage(10)
+        self.dealt_damage = True
+    else:
+        player.can_attack = False
+        player.attacked_this_phase = False
+        
