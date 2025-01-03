@@ -1,6 +1,9 @@
 # The Last Vanguard
 ## CS110 Final Project  Fall, 2024 
 
+## Team Members
+
+    William Conroy
 
 ## Project Description
     The player will control a swordsman who is capable of performing 3 different attack (overhead, slash, uppercut). The player however can only input these attacks after the enemy swordsman randomly performs one. The player is to input whatever attack the enemy performs in order to "counter" the attack and avoid damage. If they counter successfully the enemy will recieve damage, and if they fail the player will take damage. The enemy will survive 10 hits and then the player will move on to the next level where the enemy gets faster. There are an infinite amount of levels, and the player is to survive as many levels as possible. Inputting J will let the player "slash". Inputting "K" will let the player "overhead". Inputting "L" will let the player "uppercut". The players highscore will be saved to a file and update after each game. 

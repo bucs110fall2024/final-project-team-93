@@ -94,3 +94,4 @@ class Controller:
             self.enemy.respawn(new_animation_speed, new_attack_timer_max)
             self.mysprites.add(self.enemy)
             self.respawn_time = None
+
