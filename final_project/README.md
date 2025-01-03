@@ -1,6 +1,3 @@
-
-:warning: Everything between << >> needs to be replaced (remove << >> after replacing)
-
 # The Last Vanguard
 ## CS110 Final Project  Fall, 2024 
 
@@ -18,6 +15,7 @@ The game will have two swordsman standing on a platform facing each other. One w
 
 ![final gui](assets/finalgui.jpg)
 ![final gui](assets/finalgui2.jpg)
+
 ## Program Design
 
 controller
